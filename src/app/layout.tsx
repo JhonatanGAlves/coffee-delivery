@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Baloo_2, Roboto } from "next/font/google";
+import { Baloo_2, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
 const balooTwo = Baloo_2({
@@ -8,11 +8,11 @@ const balooTwo = Baloo_2({
   weight: ["700", "800"],
   variable: "--font-baloo-two",
 });
-const roboto = Roboto({
+const robotoMono = Roboto_Mono({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "700"],
-  variable: "--font-roboto",
+  variable: "--font-roboto-mono",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${balooTwo.variable} ${roboto.variable}`}>
+      <body className={`${balooTwo.variable} ${robotoMono.variable}`}>
         {children}
       </body>
     </html>

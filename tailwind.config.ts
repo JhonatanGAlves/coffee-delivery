@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-baloo-two)"],
-        mono: ["var(--font-roboto)"],
+        mono: ["var(--font-roboto-mono)"],
       },
     },
   },
