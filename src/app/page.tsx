@@ -1,3 +1,9 @@
+import Header from "../components/header/Header";
+
 export default function Home() {
-  return <h1>Hello World!</h1>;
+  return (
+    <div className="bg-[var('--background')]">
+      <Header />
+    </div>
+  );
 }
