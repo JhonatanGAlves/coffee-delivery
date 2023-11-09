@@ -1,15 +1,18 @@
 "use client";
+import { useContext } from "react";
+
 import Image from "next/image";
 
 import { ShoppingCart, Package, Timer, Coffee } from "@phosphor-icons/react";
 
+import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 import bgHero from "../../assets/background-hero.png";
 import bgImage from "../../assets/bg-image.svg";
 import CoffeeCatalogCard from "./coffee-card/CoffeeCatalogCard";
-import lateCoffee from "../../assets/coffee/latte.svg";
-import { cafes } from "@/utils/mock";
 
 export default function Main() {
+  const { cafesAvailable } = useContext(CoffeeDeliveryContext);
+
   return (
     <div className="flex flex-col px-40 pb-[8.5625rem]">
       <div className="flex justify-between items-center h-[34rem]">
@@ -75,9 +78,10 @@ export default function Main() {
       </h3>
 
       <div className="grid grid-cols-1 min-[858px]:grid-cols-2 min-[1134px]:grid-cols-3 min-[1411px]:grid-cols-4 gap-8">
-        {cafes.map((coffee, index) => (
+        {cafesAvailable.map((coffee) => (
           <CoffeeCatalogCard
-            key={index}
+            key={coffee.id}
+            id={coffee.id}
             coffeeImage={coffee.coffeeImage}
             compositions={coffee.compositions}
             coffeeName={coffee.coffeeName}

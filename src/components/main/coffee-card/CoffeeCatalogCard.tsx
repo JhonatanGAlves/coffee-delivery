@@ -1,10 +1,12 @@
+import { useContext, useState } from "react";
+
 import Image from "next/image";
-import Link from "next/link";
 
 import { ShoppingCart, Plus, Minus } from "@phosphor-icons/react";
-import { useState } from "react";
+import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 
 export default function CoffeeCatalogCard({
+  id,
   coffeeImage,
   compositions,
   coffeeName,
@@ -12,6 +14,22 @@ export default function CoffeeCatalogCard({
   price,
 }: CoffeeTypes) {
   const [amountToBuy, setAmountToBuy] = useState(1);
+
+  const { addToCart, cart } = useContext(CoffeeDeliveryContext);
+
+  function addCoffeeToCart(amountToBuy: number) {
+    const newCoffee: CoffeeTypes = {
+      id,
+      coffeeImage,
+      compositions,
+      coffeeName,
+      description,
+      price,
+      amount: amountToBuy,
+    };
+
+    addToCart(cart, newCoffee);
+  }
 
   return (
     <div className="flex flex-col mb-5 items-center px-5 bg-[var(--base-card)] rounded-tl-md rounded-tr-[2.25rem] rounded-br-md rounded-bl-[2.25rem]">
@@ -67,9 +85,10 @@ export default function CoffeeCatalogCard({
             </button>
           </div>
 
-          <Link
+          <button
+            type="button"
             className="flex justify-center items-center w-[2.375rem] h-[2.375rem] rounded-md bg-[var(--purple-dark)] hover:bg-[var(--purple)] transition-all"
-            href={"/shopping-cart"}
+            onClick={() => addCoffeeToCart(amountToBuy)}
           >
             <ShoppingCart
               width={19.74}
@@ -77,7 +96,7 @@ export default function CoffeeCatalogCard({
               color="var(--base-card)"
               weight="fill"
             />
-          </Link>
+          </button>
         </div>
       </footer>
     </div>

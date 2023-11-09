@@ -15,6 +15,7 @@ import irishImage from "../assets/coffee/irish.svg";
 
 export const cafes: CoffeeTypes[] = [
   {
+    id: 1,
     coffeeImage: espressoImage,
     compositions: ["traditional"],
     coffeeName: "Traditional Espresso",
@@ -22,6 +23,7 @@ export const cafes: CoffeeTypes[] = [
     price: 6.9,
   },
   {
+    id: 2,
     coffeeImage: americanImage,
     compositions: ["traditional"],
     coffeeName: "American Espresso",
@@ -29,6 +31,7 @@ export const cafes: CoffeeTypes[] = [
     price: 6.9,
   },
   {
+    id: 3,
     coffeeImage: creamyImage,
     compositions: ["traditional"],
     coffeeName: "Creamy Espresso",
@@ -36,6 +39,7 @@ export const cafes: CoffeeTypes[] = [
     price: 7.9,
   },
   {
+    id: 4,
     coffeeImage: icedImage,
     compositions: ["traditional", "iced"],
     coffeeName: "Iced American",
@@ -43,6 +47,7 @@ export const cafes: CoffeeTypes[] = [
     price: 7.9,
   },
   {
+    id: 5,
     coffeeImage: coffeeWithMilkImage,
     compositions: ["traditional", "with milk"],
     coffeeName: "Coffee with Milk",
@@ -50,6 +55,7 @@ export const cafes: CoffeeTypes[] = [
     price: 8.9,
   },
   {
+    id: 6,
     coffeeImage: latteImage,
     compositions: ["traditional", "with milk"],
     coffeeName: "Latte",
@@ -57,6 +63,7 @@ export const cafes: CoffeeTypes[] = [
     price: 8.9,
   },
   {
+    id: 7,
     coffeeImage: capuccinoImage,
     compositions: ["traditional", "with milk"],
     coffeeName: "Capuccino",
@@ -65,6 +72,7 @@ export const cafes: CoffeeTypes[] = [
     price: 8.9,
   },
   {
+    id: 8,
     coffeeImage: macchiatoImage,
     compositions: ["traditional", "with milk"],
     coffeeName: "Macchiato",
@@ -72,6 +80,7 @@ export const cafes: CoffeeTypes[] = [
     price: 8.9,
   },
   {
+    id: 9,
     coffeeImage: mocaccinoImage,
     compositions: ["traditional", "with milk"],
     coffeeName: "Mocaccino",
@@ -79,6 +88,7 @@ export const cafes: CoffeeTypes[] = [
     price: 8.9,
   },
   {
+    id: 10,
     coffeeImage: hotChocolateImage,
     compositions: ["special", "with milk"],
     coffeeName: "Hot Chocolate",
@@ -86,6 +96,7 @@ export const cafes: CoffeeTypes[] = [
     price: 9.9,
   },
   {
+    id: 11,
     coffeeImage: cubanImage,
     compositions: ["special", "alcoholic", "iced"],
     coffeeName: "Cuban",
@@ -93,6 +104,7 @@ export const cafes: CoffeeTypes[] = [
     price: 9.9,
   },
   {
+    id: 12,
     coffeeImage: hawaiianImage,
     compositions: ["special"],
     coffeeName: "Hawaiian",
@@ -100,6 +112,7 @@ export const cafes: CoffeeTypes[] = [
     price: 7.9,
   },
   {
+    id: 13,
     coffeeImage: arabicImage,
     compositions: ["special"],
     coffeeName: "Arabic",
@@ -107,6 +120,7 @@ export const cafes: CoffeeTypes[] = [
     price: 7.9,
   },
   {
+    id: 14,
     coffeeImage: irishImage,
     compositions: ["special", "alcoholic"],
     coffeeName: "Irish",
