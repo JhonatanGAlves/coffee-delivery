@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ShoppingCart, Plus, Minus } from "@phosphor-icons/react";
+import { useState } from "react";
 
 export default function CoffeeCatalogCard({
   coffeeImage,
@@ -10,6 +11,8 @@ export default function CoffeeCatalogCard({
   description,
   price,
 }: CoffeeTypes) {
+  const [amountToBuy, setAmountToBuy] = useState(1);
+
   return (
     <div className="flex flex-col mb-5 items-center px-5 bg-[var(--base-card)] rounded-tl-md rounded-tr-[2.25rem] rounded-br-md rounded-bl-[2.25rem]">
       <header className="flex flex-col items-center gap-3 -mt-5">
@@ -45,13 +48,21 @@ export default function CoffeeCatalogCard({
         </span>
         <div className="flex gap-2">
           <div className="flex justify-between items-center w-[4.5rem] h-[2.375rem] rounded-md bg-[var(--base-button)]">
-            <button className="outline-none h-full flex justify-center items-center flex-1 text-[var(--purple)]">
+            <button
+              className="outline-none h-full flex justify-center items-center flex-1 text-[var(--purple)]"
+              onClick={() => {
+                amountToBuy > 1 && setAmountToBuy(amountToBuy - 1);
+              }}
+            >
               <Minus size={10.94} color="var(--purple)" />
             </button>
             <span className="font-mono font-normal text-base text-[var(--base-title)]">
-              1
+              {amountToBuy}
             </span>
-            <button className="outline-none h-full flex justify-center items-center flex-1 text-[var(--purple)]">
+            <button
+              className="outline-none h-full flex justify-center items-center flex-1 text-[var(--purple)]"
+              onClick={() => setAmountToBuy(amountToBuy + 1)}
+            >
               <Plus size={10.94} color="var(--purple)" />
             </button>
           </div>
