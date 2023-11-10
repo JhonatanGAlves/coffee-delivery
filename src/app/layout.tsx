@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Baloo_2, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/header/Header";
+import { CoffeeDeliveryProvider } from "@/context/CoffeeDeliveryContext";
 
 const balooTwo = Baloo_2({
   subsets: ["latin"],
@@ -28,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${balooTwo.variable} ${robotoMono.variable}`}>
-        {children}
+        <CoffeeDeliveryProvider>
+          <Header />
+          {children}
+        </CoffeeDeliveryProvider>
       </body>
     </html>
   );
