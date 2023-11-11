@@ -1,6 +1,7 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 
+import Link from "next/link";
 import {
   Bank,
   CreditCard,
@@ -11,10 +12,9 @@ import {
 
 import CoffeeCartCard from "@/components/main/coffee-card/CoffeeCartCard";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
-import Link from "next/link";
 
 export default function ShoppingCartPage() {
-  const { cart } = useContext(CoffeeDeliveryContext);
+  const { cart, formInfo, setFormInfo } = useContext(CoffeeDeliveryContext);
   const [totalSumItems, setTotalSumItems] = useState(0);
 
   const DELIVERY_FEE_VALUE = cart.length > 0 ? 3.5 : 0.0;
@@ -33,12 +33,27 @@ export default function ShoppingCartPage() {
     }
   }
 
+  function onChangeFormInfo(
+    key: string,
+    event?: React.ChangeEvent<HTMLInputElement>,
+    paymentMethod?: "CREDIT" | "DEBIT" | "MONEY"
+  ) {
+    event?.preventDefault();
+
+    const newFormInfo: FormInfoTypes = {
+      ...formInfo,
+      [key]: event?.target.value ?? paymentMethod ?? "",
+    };
+
+    setFormInfo(newFormInfo);
+  }
+
   useEffect(() => {
     getTotalSumItems(cart);
   }, [cart]);
 
   return (
-    <div className="bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-[15rem]">
+    <div className="bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20">
       <div className="flex flex-col">
         <span className="mb-[0.9375rem] text-[var(--base-subtitle)] font-sans font-bold text-lg">
           Complete your order
@@ -64,41 +79,60 @@ export default function ShoppingCartPage() {
           <form className="flex flex-col gap-4">
             <input
               type="text"
-              placeholder="Zip Cod"
+              value={formInfo.zipCode}
               className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+              onChange={(e) => onChangeFormInfo("zipCode", e)}
+              placeholder="Zip Code"
             />
             <input
               type="text"
-              placeholder="Street"
+              value={formInfo.street}
               className="outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+              onChange={(e) => onChangeFormInfo("street", e)}
+              placeholder="Street"
             />
             <div className="flex gap-3 w-full">
               <input
                 type="text"
-                placeholder="Number"
+                value={formInfo.number}
                 className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                onChange={(e) => onChangeFormInfo("number", e)}
+                placeholder="Number"
               />
-              <input
-                type="text"
-                placeholder="Complement"
-                className="flex-1 outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
-              />
+              <div className="flex items-center gap-1 flex-1 p-3 bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus-within:border-[var(--yellow-dark)] rounded transition-all">
+                <input
+                  type="text"
+                  value={formInfo.complement}
+                  className="flex-1 outline-none font-normal text-sm bg-transparent placeholder:text-[var(--base-label)]"
+                  onChange={(e) => onChangeFormInfo("complement", e)}
+                  placeholder="Complement"
+                />
+                <span className="w-fit italic text-[var(--base-label)] text-xs">
+                  Optional
+                </span>
+              </div>
             </div>
             <div className="flex gap-3 w-full">
               <input
                 type="text"
-                placeholder="District"
+                value={formInfo.district}
                 className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                onChange={(e) => onChangeFormInfo("district", e)}
+                placeholder="District"
               />
               <input
                 type="text"
-                placeholder="City"
+                value={formInfo.city}
                 className=" flex-1 outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                onChange={(e) => onChangeFormInfo("city", e)}
+                placeholder="City"
               />
               <input
                 type="text"
-                placeholder="UF"
+                value={formInfo.uf}
                 className="w-[11.11%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                onChange={(e) => onChangeFormInfo("uf", e)}
+                placeholder="UF"
               />
             </div>
           </form>
@@ -122,15 +156,39 @@ export default function ShoppingCartPage() {
           </div>
 
           <div className="flex gap-3">
-            <button className="flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs transition-all">
+            <button
+              className={`${
+                formInfo.paymentMethod === "CREDIT" &&
+                "bg-[var(--purple-light)] border border-solid border-[var(--purple)] hover:bg-[var(--purple-light)]"
+              } flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs border border-solid border-[var(--base-button)] transition-all`}
+              onClick={() =>
+                onChangeFormInfo("paymentMethod", undefined, "CREDIT")
+              }
+            >
               <CreditCard size={16} color="var(--purple)" />
               <span>CREDIT CARD</span>
             </button>
-            <button className="flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs transition-all">
+            <button
+              className={`${
+                formInfo.paymentMethod === "DEBIT" &&
+                "bg-[var(--purple-light)] border border-solid border-[var(--purple)] hover:bg-[var(--purple-light)]"
+              } flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs border border-solid border-[var(--base-button)] transition-all`}
+              onClick={() =>
+                onChangeFormInfo("paymentMethod", undefined, "DEBIT")
+              }
+            >
               <Bank size={16} color="var(--purple)" />
               <span>DEBIT CARD</span>
             </button>
-            <button className="flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs transition-all">
+            <button
+              className={`${
+                formInfo.paymentMethod === "MONEY" &&
+                "bg-[var(--purple-light)] border border-solid border-[var(--purple)] hover:bg-[var(--purple-light)]"
+              } flex p-4 gap-3 rounded-md bg-[var(--base-button)] hover:bg-[var(--base-hover)] w-1/3 font-normal text-xs border border-solid border-[var(--base-button)] transition-all`}
+              onClick={() =>
+                onChangeFormInfo("paymentMethod", undefined, "MONEY")
+              }
+            >
               <Money size={16} color="var(--purple)" />
               <span>MONEY</span>
             </button>
@@ -193,12 +251,14 @@ export default function ShoppingCartPage() {
               </span>
             </div>
           </div>
-          <button
-            className="outline-none p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md disabled:opacity-60 disabled:bg-[var(--yellow)] disabled:cursor-not-allowed"
-            disabled={!cart.length}
-          >
-            confirm order
-          </button>
+          <Link href={"order-confirmed"}>
+            <button
+              className="outline-none w-full p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md disabled:opacity-60 disabled:bg-[var(--yellow)] disabled:cursor-not-allowed"
+              disabled={!cart.length}
+            >
+              confirm order
+            </button>
+          </Link>
         </div>
       </div>
     </div>

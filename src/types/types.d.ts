@@ -11,3 +11,14 @@ type CoffeeTypes = {
 interface CoffeeCartTypes extends CoffeeTypes {
   totalPrice: number;
 }
+
+type FormInfoTypes = {
+  zipCode: string;
+  street: string;
+  number: string;
+  complement: string;
+  district: string;
+  city: string;
+  uf: string;
+  paymentMethod: "CREDIT" | "DEBIT" | "MONEY" | undefined;
+};

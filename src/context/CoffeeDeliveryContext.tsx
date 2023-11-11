@@ -1,6 +1,7 @@
 "use client";
-import { cafes } from "@/utils/mock";
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
+import { cafes } from "@/utils/mock";
+import { FORM_INFO_DEFAULT } from "@/utils/data";
 
 interface CoffeeDeliveryProviderProps {
   children: ReactNode;
@@ -23,6 +24,8 @@ interface CoffeeDeliveryContextProps {
   deleteItemFromCart: (id: number, currentCart: CoffeeCartTypes[]) => void;
   infoTotalItems: number;
   setInfoTotalItems: (infoTotalItems: number) => void;
+  formInfo: FormInfoTypes;
+  setFormInfo: (formInfo: FormInfoTypes) => void;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -40,6 +43,7 @@ export const CoffeeDeliveryProvider = ({
   const [cafesAvailable, setCafesAvailable] = useState<CoffeeTypes[]>([]);
   const [cart, setCart] = useState<CoffeeCartTypes[]>(getCartFromStorage ?? []);
   const [infoTotalItems, setInfoTotalItems] = useState(0);
+  const [formInfo, setFormInfo] = useState<FormInfoTypes>(FORM_INFO_DEFAULT);
 
   function addItemToCart(
     currentCart: CoffeeCartTypes[],
@@ -116,8 +120,10 @@ export const CoffeeDeliveryProvider = ({
       deleteItemFromCart,
       infoTotalItems,
       setInfoTotalItems,
+      formInfo,
+      setFormInfo,
     };
-  }, [cafesAvailable, cart, infoTotalItems]);
+  }, [cafesAvailable, cart, infoTotalItems, formInfo]);
 
   return (
     <CoffeeDeliveryContext.Provider value={values}>
