@@ -78,10 +78,11 @@ export default function Main() {
       </h3>
 
       <div className="grid grid-cols-1 min-[858px]:grid-cols-2 min-[1134px]:grid-cols-3 min-[1411px]:grid-cols-4 gap-8">
-        {cafesAvailable.map((coffee) => (
+        {cafesAvailable.map((coffee, index) => (
           <CoffeeCatalogCard
             key={coffee.id}
             id={coffee.id}
+            index={index}
             coffeeImage={coffee.coffeeImage}
             compositions={coffee.compositions}
             coffeeName={coffee.coffeeName}

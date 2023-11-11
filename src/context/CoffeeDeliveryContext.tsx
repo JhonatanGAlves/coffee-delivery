@@ -8,8 +8,19 @@ interface CoffeeDeliveryProviderProps {
 
 interface CoffeeDeliveryContextProps {
   cafesAvailable: CoffeeTypes[];
-  addToCart: (cart: CoffeeTypes[], coffee: CoffeeTypes) => void;
-  cart: CoffeeTypes[];
+  addItemToCart: (
+    cart: CoffeeCartTypes[],
+    coffee: CoffeeCartTypes,
+    index: number
+  ) => void;
+  cart: CoffeeCartTypes[];
+  updateItemFromCart: (
+    idx: number,
+    operation: "subtract" | "add",
+    currentCart: CoffeeCartTypes[],
+    price: number
+  ) => void;
+  deleteItemFromCart: (id: number, currentCart: CoffeeCartTypes[]) => void;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -25,39 +36,58 @@ export const CoffeeDeliveryProvider = ({
       : null;
 
   const [cafesAvailable, setCafesAvailable] = useState<CoffeeTypes[]>([]);
-  const [cart, setCart] = useState<CoffeeTypes[]>(getCartFromStorage ?? []);
+  const [cart, setCart] = useState<CoffeeCartTypes[]>(getCartFromStorage ?? []);
 
-  function addToCart(currentCart: CoffeeTypes[], newCoffee: CoffeeTypes) {
+  function addItemToCart(
+    currentCart: CoffeeCartTypes[],
+    newCoffee: CoffeeCartTypes,
+    index: number
+  ) {
     const coffeeAlreadyExistInTheCart = currentCart.find(
       (coffee) => coffee.id === newCoffee.id
     );
 
-    if (coffeeAlreadyExistInTheCart?.amount && newCoffee.amount) {
-      const currentCartWithoutTheExistingCoffee = currentCart.filter(
-        (cart) => cart.id !== newCoffee.id
-      );
+    if (coffeeAlreadyExistInTheCart) {
+      (currentCart[index].amount as number) += newCoffee.amount as number;
+      (currentCart[index].totalPrice as number) +=
+        newCoffee.totalPrice as number;
 
-      const existingCoffeeWithTheUpdatedAmount = {
-        ...coffeeAlreadyExistInTheCart,
-        amount: coffeeAlreadyExistInTheCart.amount + newCoffee.amount,
-      };
-
-      setCart([
-        ...currentCartWithoutTheExistingCoffee,
-        existingCoffeeWithTheUpdatedAmount,
-      ]);
-
-      localStorage.setItem(
-        "cart",
-        JSON.stringify([
-          ...currentCartWithoutTheExistingCoffee,
-          existingCoffeeWithTheUpdatedAmount,
-        ])
-      );
+      setCart(currentCart);
+      localStorage.setItem("cart", JSON.stringify(currentCart));
     } else {
       setCart([...currentCart, newCoffee]);
       localStorage.setItem("cart", JSON.stringify([...currentCart, newCoffee]));
     }
+  }
+
+  function updateItemFromCart(
+    idx: number,
+    operation: "subtract" | "add",
+    currentCart: CoffeeCartTypes[],
+    price: number
+  ) {
+    const allItemsInCart = [...currentCart];
+
+    if (operation === "subtract") {
+      (allItemsInCart[idx].amount as number) -= 1;
+      (allItemsInCart[idx].totalPrice as number) -= price;
+    } else {
+      (allItemsInCart[idx].amount as number) += 1;
+      (allItemsInCart[idx].totalPrice as number) += price;
+    }
+
+    setCart(allItemsInCart);
+    localStorage.setItem("cart", JSON.stringify(allItemsInCart));
+  }
+
+  function deleteItemFromCart(id: number, currentCart: CoffeeCartTypes[]) {
+    const allItemsInCart = [...currentCart];
+    const cartWithoutTheItemDeleted = allItemsInCart.filter(
+      (item) => item.id !== id
+    );
+
+    setCart(cartWithoutTheItemDeleted);
+    localStorage.setItem("cart", JSON.stringify(cartWithoutTheItemDeleted));
   }
 
   useEffect(() => {
@@ -65,7 +95,13 @@ export const CoffeeDeliveryProvider = ({
   }, []);
 
   const values = useMemo(() => {
-    return { cafesAvailable, addToCart, cart };
+    return {
+      cafesAvailable,
+      addItemToCart,
+      cart,
+      updateItemFromCart,
+      deleteItemFromCart,
+    };
   }, [cafesAvailable, cart]);
 
   return (

@@ -7,3 +7,7 @@ type CoffeeTypes = {
   price: number;
   amount?: number;
 };
+
+interface CoffeeCartTypes extends CoffeeTypes {
+  totalPrice: number;
+}

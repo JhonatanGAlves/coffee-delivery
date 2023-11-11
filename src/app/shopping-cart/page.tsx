@@ -1,6 +1,6 @@
 "use client";
-import CoffeeCartCard from "@/components/main/coffee-card/CoffeeCartCard";
-import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
+import { useContext, useEffect, useState } from "react";
+
 import {
   Bank,
   CreditCard,
@@ -8,10 +8,31 @@ import {
   MapPinLine,
   Money,
 } from "@phosphor-icons/react";
-import { useContext } from "react";
+
+import CoffeeCartCard from "@/components/main/coffee-card/CoffeeCartCard";
+import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 
 export default function ShoppingCartPage() {
   const { cart } = useContext(CoffeeDeliveryContext);
+  const [totalSumItems, setTotalSumItems] = useState(0);
+
+  function getTotalSumItems(currentCart: CoffeeCartTypes[]) {
+    const allItemPrices = currentCart.map((item) => item.totalPrice);
+
+    if (!allItemPrices.length) {
+      setTotalSumItems(0);
+    } else {
+      const sum = allItemPrices.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      }, 0);
+
+      setTotalSumItems(sum);
+    }
+  }
+
+  useEffect(() => {
+    getTotalSumItems(cart);
+  }, [cart]);
 
   return (
     <div className="bg-[var('--background')] flex gap-8 px-40 pt-10 pb-[15rem]">
@@ -120,16 +141,41 @@ export default function ShoppingCartPage() {
         </span>
 
         <div className="flex flex-col gap-8 p-10 bg-[var(--base-card)] rounded-tl-md rounded-tr-[2.75rem] rounded-br-md rounded-bl-[2.75rem]">
-          {cart.map((coffee) => (
+          {cart.map((coffee, index) => (
             <CoffeeCartCard
               key={coffee.id}
               id={coffee.id}
+              index={index}
               coffeeImage={coffee.coffeeImage}
               coffeeName={coffee.coffeeName}
               price={coffee.price}
+              totalPrice={coffee.totalPrice}
               amount={coffee.amount}
             />
           ))}
+          <div className="flex flex-col gap-3">
+            <div className="flex justify-between">
+              <span className="font-normal text-sm">Total items</span>
+              <span className="font-normal text-base">
+                $ {totalSumItems.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-normal text-sm">Delivery fee</span>
+              <span className="font-normal text-base">$ 3.50</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-bold text-xl text-[var(--base-subtitle)]">
+                Total
+              </span>
+              <span className="font-bold text-xl text-[var(--base-subtitle)]">
+                $ {(totalSumItems + 3.5).toFixed(2)}
+              </span>
+            </div>
+          </div>
+          <button className="outline-none p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md">
+            confirm order
+          </button>
         </div>
       </div>
     </div>
