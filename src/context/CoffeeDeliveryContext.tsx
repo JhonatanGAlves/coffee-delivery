@@ -21,6 +21,8 @@ interface CoffeeDeliveryContextProps {
     price: number
   ) => void;
   deleteItemFromCart: (id: number, currentCart: CoffeeCartTypes[]) => void;
+  infoTotalItems: number;
+  setInfoTotalItems: (infoTotalItems: number) => void;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -37,6 +39,7 @@ export const CoffeeDeliveryProvider = ({
 
   const [cafesAvailable, setCafesAvailable] = useState<CoffeeTypes[]>([]);
   const [cart, setCart] = useState<CoffeeCartTypes[]>(getCartFromStorage ?? []);
+  const [infoTotalItems, setInfoTotalItems] = useState(0);
 
   function addItemToCart(
     currentCart: CoffeeCartTypes[],
@@ -82,6 +85,7 @@ export const CoffeeDeliveryProvider = ({
 
   function deleteItemFromCart(id: number, currentCart: CoffeeCartTypes[]) {
     const allItemsInCart = [...currentCart];
+    infoTotalItems;
     const cartWithoutTheItemDeleted = allItemsInCart.filter(
       (item) => item.id !== id
     );
@@ -89,6 +93,15 @@ export const CoffeeDeliveryProvider = ({
     setCart(cartWithoutTheItemDeleted);
     localStorage.setItem("cart", JSON.stringify(cartWithoutTheItemDeleted));
   }
+
+  useEffect(() => {
+    const allItemAmount = [...cart].map((item) => item.amount as number);
+    const totalAmount = allItemAmount.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    setInfoTotalItems(totalAmount);
+  }, [cart]);
 
   useEffect(() => {
     setCafesAvailable(cafes);
@@ -101,8 +114,10 @@ export const CoffeeDeliveryProvider = ({
       cart,
       updateItemFromCart,
       deleteItemFromCart,
+      infoTotalItems,
+      setInfoTotalItems,
     };
-  }, [cafesAvailable, cart]);
+  }, [cafesAvailable, cart, infoTotalItems]);
 
   return (
     <CoffeeDeliveryContext.Provider value={values}>

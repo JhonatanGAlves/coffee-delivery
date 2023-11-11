@@ -1,12 +1,17 @@
 "use client";
+import { useContext } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import { MapPin, ShoppingCart } from "@phosphor-icons/react";
 
 import logoHeader from "../../assets/logo-header.svg";
+import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 
 export default function Header() {
+  const { infoTotalItems } = useContext(CoffeeDeliveryContext);
+
   return (
     <header className="flex justify-between items-center px-40 py-8">
       <Link href={"/"}>
@@ -18,17 +23,17 @@ export default function Header() {
           <span>Huston, TX</span>
         </div>
 
-        <Link
-          className="flex justify-center items-center w-[2.375rem] h-[2.375rem] rounded-md bg-[var(--yellow-light)]"
-          href={"/shopping-cart"}
-        >
-          <ShoppingCart
-            width={18.56}
-            height={17.88}
-            color="var(--yellow-dark)"
-            weight="fill"
-          />
-        </Link>
+        <div className="relative">
+          <Link
+            className="flex justify-center items-center w-[2.375rem] h-[2.375rem] rounded-md bg-[var(--yellow-light)]"
+            href={"/shopping-cart"}
+          >
+            <ShoppingCart size={24} color="var(--yellow-dark)" weight="fill" />
+          </Link>
+          <div className="flex justify-center items-center w-5 h-5 rounded-full text-xs font-bold text-[var(--white)] bg-[var(--yellow-dark)] absolute -top-2.5 -right-2.5 cursor-default">
+            {infoTotalItems}
+          </div>
+        </div>
       </div>
     </header>
   );
