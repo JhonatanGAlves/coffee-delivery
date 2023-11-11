@@ -30,9 +30,11 @@ export default function Header() {
           >
             <ShoppingCart size={24} color="var(--yellow-dark)" weight="fill" />
           </Link>
-          <div className="flex justify-center items-center w-5 h-5 rounded-full text-xs font-bold text-[var(--white)] bg-[var(--yellow-dark)] absolute -top-2.5 -right-2.5 cursor-default">
-            {infoTotalItems}
-          </div>
+          {infoTotalItems > 0 && (
+            <div className="flex justify-center items-center w-5 h-5 rounded-full text-xs font-bold text-[var(--white)] bg-[var(--yellow-dark)] absolute -top-2.5 -right-2.5 cursor-default">
+              {infoTotalItems}
+            </div>
+          )}
         </div>
       </div>
     </header>
