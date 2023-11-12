@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -11,9 +11,26 @@ import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 
 export default function Header() {
   const { infoTotalItems } = useContext(CoffeeDeliveryContext);
+  const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    setCurrentScrollPosition(window.scrollY);
+  };
+
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="flex justify-between items-center px-40 py-8">
+    <header
+      className={`${
+        currentScrollPosition > 104 && "drop-shadow-md"
+      } fixed top-0 w-screen bg-[var(--background)] flex justify-between items-center px-40 py-8`}
+    >
       <Link href={"/"}>
         <Image src={logoHeader} alt="Coffee image in homepage header" />
       </Link>
