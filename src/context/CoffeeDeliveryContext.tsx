@@ -1,5 +1,12 @@
 "use client";
-import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { cafes } from "@/utils/mock";
 import { FORM_INFO_DEFAULT } from "@/utils/data";
 
@@ -66,6 +73,7 @@ export const CoffeeDeliveryProvider = ({
       setCart([...currentCart, newCoffee]);
       localStorage.setItem("cart", JSON.stringify([...currentCart, newCoffee]));
     }
+    updateInfoTotalItems();
   }
 
   function updateItemFromCart(
@@ -104,13 +112,17 @@ export const CoffeeDeliveryProvider = ({
     localStorage.setItem("cart", JSON.stringify([]));
   }
 
-  useEffect(() => {
+  const updateInfoTotalItems = useCallback(() => {
     const allItemAmount = [...cart].map((item) => item.amount as number);
     const totalAmount = allItemAmount.reduce((accumulator, currentValue) => {
       return accumulator + currentValue;
     }, 0);
 
     setInfoTotalItems(totalAmount);
+  }, [cart]);
+
+  useEffect(() => {
+    updateInfoTotalItems();
   }, [cart]);
 
   useEffect(() => {
