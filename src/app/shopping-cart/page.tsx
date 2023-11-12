@@ -15,8 +15,13 @@ import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 import { FORM_INFO_DEFAULT } from "@/utils/data";
 
 export default function ShoppingCartPage() {
-  const { cart, formInfo, setFormInfo, setInfoTotalItems, emptyItemsFromCart } =
-    useContext(CoffeeDeliveryContext);
+  const {
+    cart,
+    formInfo,
+    setFormInfo,
+    emptyItemsFromCart,
+    setShowSuccessNotificationAlert,
+  } = useContext(CoffeeDeliveryContext);
   const [totalSumItems, setTotalSumItems] = useState(0);
 
   const DELIVERY_FEE_VALUE = cart.length > 0 ? 3.5 : 0.0;
@@ -59,7 +64,7 @@ export default function ShoppingCartPage() {
   }, []);
 
   return (
-    <div className="bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20">
+    <div className="mt-[6.5rem] bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20">
       <div className="flex flex-col">
         <span className="mb-[0.9375rem] text-[var(--base-subtitle)] font-sans font-bold text-lg">
           Complete your order
@@ -260,7 +265,17 @@ export default function ShoppingCartPage() {
           <Link href={"order-confirmed"}>
             <button
               className="outline-none w-full p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md disabled:opacity-60 disabled:bg-[var(--yellow)] disabled:cursor-not-allowed"
-              onClick={() => emptyItemsFromCart(cart)}
+              onClick={() => {
+                emptyItemsFromCart(cart);
+
+                setShowSuccessNotificationAlert({
+                  message:
+                    "Congratulations your order has been confirmed successfully",
+                  description:
+                    "You can return to the home page and buy new cafes",
+                  showAlert: true,
+                });
+              }}
               disabled={!cart.length}
             >
               confirm order

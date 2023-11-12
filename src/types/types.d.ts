@@ -22,3 +22,9 @@ type FormInfoTypes = {
   uf: string;
   paymentMethod: "CREDIT" | "DEBIT" | "MONEY" | undefined;
 };
+
+interface MessageAlertTypes {
+  message: string;
+  description: string;
+  showAlert: boolean;
+}

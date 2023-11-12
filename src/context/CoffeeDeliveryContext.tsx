@@ -34,6 +34,10 @@ interface CoffeeDeliveryContextProps {
   setInfoTotalItems: (infoTotalItems: number) => void;
   formInfo: FormInfoTypes;
   setFormInfo: (formInfo: FormInfoTypes) => void;
+  showSuccessNotificationAlert: MessageAlertTypes;
+  setShowSuccessNotificationAlert: (
+    showSuccessNotificationAlert: MessageAlertTypes
+  ) => void;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -52,6 +56,12 @@ export const CoffeeDeliveryProvider = ({
   const [cart, setCart] = useState<CoffeeCartTypes[]>(getCartFromStorage ?? []);
   const [infoTotalItems, setInfoTotalItems] = useState(0);
   const [formInfo, setFormInfo] = useState<FormInfoTypes>(FORM_INFO_DEFAULT);
+  const [showSuccessNotificationAlert, setShowSuccessNotificationAlert] =
+    useState<MessageAlertTypes>({
+      message: "",
+      showAlert: false,
+      description: "",
+    });
 
   function addItemToCart(
     currentCart: CoffeeCartTypes[],
@@ -73,6 +83,13 @@ export const CoffeeDeliveryProvider = ({
       setCart([...currentCart, newCoffee]);
       localStorage.setItem("cart", JSON.stringify([...currentCart, newCoffee]));
     }
+
+    setShowSuccessNotificationAlert({
+      message: "The item has been added to shopping cart successfully",
+      description: "Click on the cart at the top to see your list",
+      showAlert: true,
+    });
+
     updateInfoTotalItems();
   }
 
@@ -105,6 +122,13 @@ export const CoffeeDeliveryProvider = ({
 
     setCart(cartWithoutTheItemDeleted);
     localStorage.setItem("cart", JSON.stringify(cartWithoutTheItemDeleted));
+
+    setShowSuccessNotificationAlert({
+      message: "The item has been deleted from shopping cart successfully",
+      description:
+        "You can return to the home page and add new items to your cart",
+      showAlert: true,
+    });
   }
 
   function emptyItemsFromCart(currentCart: CoffeeCartTypes[]) {
@@ -141,8 +165,16 @@ export const CoffeeDeliveryProvider = ({
       setInfoTotalItems,
       formInfo,
       setFormInfo,
+      showSuccessNotificationAlert,
+      setShowSuccessNotificationAlert,
     };
-  }, [cafesAvailable, cart, infoTotalItems, formInfo]);
+  }, [
+    cafesAvailable,
+    cart,
+    infoTotalItems,
+    formInfo,
+    showSuccessNotificationAlert,
+  ]);
 
   return (
     <CoffeeDeliveryContext.Provider value={values}>

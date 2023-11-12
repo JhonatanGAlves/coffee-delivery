@@ -7,15 +7,20 @@ import { CurrencyDollar, MapPin, Timer } from "@phosphor-icons/react";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 import orderConfirmedPageImage from "../../assets/order-confirmed-page.svg";
 import Link from "next/link";
+import GlobalNotification from "@/components/global-notification/GlobalNotification";
 
 export default function OrderConfirmedPage() {
-  const { formInfo } = useContext(CoffeeDeliveryContext);
+  const {
+    formInfo,
+    showSuccessNotificationAlert,
+    setShowSuccessNotificationAlert,
+  } = useContext(CoffeeDeliveryContext);
 
   return (
     <div
       className={`${
         !formInfo.street && "h-[calc(100vh-6.5rem)]"
-      } bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20`}
+      } mt-[6.5rem] bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20`}
     >
       <div className={`${!formInfo.street && "justify-center"} flex flex-col`}>
         <h1 className="font-sans text-[var(--yellow-dark)] text-[2rem] font-extrabold">
@@ -46,7 +51,7 @@ export default function OrderConfirmedPage() {
               <MapPin width={16} height={16} weight="fill" />
             </div>
             <span>
-              Delivery to <b>{formInfo.street}</b> Street,{" "}
+              Delivery to <b>{formInfo.street} Street</b>,{" "}
               <b>{formInfo.number}</b> - {formInfo.district} - {formInfo.city},{" "}
               {formInfo.uf}
             </span>
@@ -82,6 +87,20 @@ export default function OrderConfirmedPage() {
         src={orderConfirmedPageImage}
         alt="Man on a motorbike making delivery"
         className={`${!formInfo.street ? "mt-0" : "mt-[7.5rem]"}`}
+      />
+
+      <GlobalNotification
+        show={showSuccessNotificationAlert.showAlert}
+        message={showSuccessNotificationAlert.message}
+        description={showSuccessNotificationAlert.description}
+        onClose={(close) =>
+          setShowSuccessNotificationAlert({
+            message: "",
+            showAlert: close,
+            description: "",
+          })
+        }
+        timeToClose={7000}
       />
     </div>
   );

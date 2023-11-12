@@ -9,9 +9,14 @@ import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 import bgHero from "../../assets/background-hero.png";
 import bgImage from "../../assets/bg-image.svg";
 import CoffeeCatalogCard from "./coffee-card/CoffeeCatalogCard";
+import GlobalNotification from "../global-notification/GlobalNotification";
 
 export default function Main() {
-  const { cafesAvailable } = useContext(CoffeeDeliveryContext);
+  const {
+    cafesAvailable,
+    showSuccessNotificationAlert,
+    setShowSuccessNotificationAlert,
+  } = useContext(CoffeeDeliveryContext);
 
   return (
     <div className="flex flex-col px-40 pb-[8.5625rem]">
@@ -91,6 +96,19 @@ export default function Main() {
           />
         ))}
       </div>
+
+      <GlobalNotification
+        show={showSuccessNotificationAlert.showAlert}
+        message={showSuccessNotificationAlert.message}
+        description={showSuccessNotificationAlert.description}
+        onClose={(close) =>
+          setShowSuccessNotificationAlert({
+            message: "",
+            showAlert: close,
+            description: "",
+          })
+        }
+      />
     </div>
   );
 }

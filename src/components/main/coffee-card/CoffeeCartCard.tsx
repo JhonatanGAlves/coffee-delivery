@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Plus, Minus, Trash } from "@phosphor-icons/react";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
+import GlobalNotification from "@/components/global-notification/GlobalNotification";
 
 interface CoffeeCartCardProps extends CoffeeCartTypes {
   index: number;
@@ -19,9 +20,13 @@ export default function CoffeeCartCard({
   index,
 }: CoffeeCartCardProps) {
   const [amountToBuy, setAmountToBuy] = useState(amount ?? 1);
-  const { cart, updateItemFromCart, deleteItemFromCart } = useContext(
-    CoffeeDeliveryContext
-  );
+  const {
+    cart,
+    updateItemFromCart,
+    deleteItemFromCart,
+    showSuccessNotificationAlert,
+    setShowSuccessNotificationAlert,
+  } = useContext(CoffeeDeliveryContext);
 
   function updateAmountAndTotalPrice(
     idx: number,
@@ -82,6 +87,19 @@ export default function CoffeeCartCard({
       <span className="font-bold text-base w-[3.75rem]">
         $ {totalPrice?.toFixed(2)}
       </span>
+
+      <GlobalNotification
+        show={showSuccessNotificationAlert.showAlert}
+        message={showSuccessNotificationAlert.message}
+        description={showSuccessNotificationAlert.description}
+        onClose={(close) =>
+          setShowSuccessNotificationAlert({
+            message: "",
+            showAlert: close,
+            description: "",
+          })
+        }
+      />
     </div>
   );
 }
