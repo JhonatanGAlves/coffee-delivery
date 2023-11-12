@@ -12,9 +12,11 @@ import {
 
 import CoffeeCartCard from "@/components/main/coffee-card/CoffeeCartCard";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
+import { FORM_INFO_DEFAULT } from "@/utils/data";
 
 export default function ShoppingCartPage() {
-  const { cart, formInfo, setFormInfo } = useContext(CoffeeDeliveryContext);
+  const { cart, formInfo, setFormInfo, setInfoTotalItems, emptyItemsFromCart } =
+    useContext(CoffeeDeliveryContext);
   const [totalSumItems, setTotalSumItems] = useState(0);
 
   const DELIVERY_FEE_VALUE = cart.length > 0 ? 3.5 : 0.0;
@@ -51,6 +53,10 @@ export default function ShoppingCartPage() {
   useEffect(() => {
     getTotalSumItems(cart);
   }, [cart]);
+
+  useEffect(() => {
+    setFormInfo(FORM_INFO_DEFAULT);
+  }, []);
 
   return (
     <div className="bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20">
@@ -239,7 +245,7 @@ export default function ShoppingCartPage() {
             <div className="flex justify-between">
               <span className="font-normal text-sm">Delivery fee</span>
               <span className="font-normal text-base">
-                $ {DELIVERY_FEE_VALUE}
+                $ {DELIVERY_FEE_VALUE.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between">
@@ -254,6 +260,7 @@ export default function ShoppingCartPage() {
           <Link href={"order-confirmed"}>
             <button
               className="outline-none w-full p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md disabled:opacity-60 disabled:bg-[var(--yellow)] disabled:cursor-not-allowed"
+              onClick={() => emptyItemsFromCart(cart)}
               disabled={!cart.length}
             >
               confirm order

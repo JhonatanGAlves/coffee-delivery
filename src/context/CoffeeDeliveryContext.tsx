@@ -22,6 +22,7 @@ interface CoffeeDeliveryContextProps {
     price: number
   ) => void;
   deleteItemFromCart: (id: number, currentCart: CoffeeCartTypes[]) => void;
+  emptyItemsFromCart: (currentCart: CoffeeCartTypes[]) => void;
   infoTotalItems: number;
   setInfoTotalItems: (infoTotalItems: number) => void;
   formInfo: FormInfoTypes;
@@ -98,6 +99,11 @@ export const CoffeeDeliveryProvider = ({
     localStorage.setItem("cart", JSON.stringify(cartWithoutTheItemDeleted));
   }
 
+  function emptyItemsFromCart(currentCart: CoffeeCartTypes[]) {
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([]));
+  }
+
   useEffect(() => {
     const allItemAmount = [...cart].map((item) => item.amount as number);
     const totalAmount = allItemAmount.reduce((accumulator, currentValue) => {
@@ -118,6 +124,7 @@ export const CoffeeDeliveryProvider = ({
       cart,
       updateItemFromCart,
       deleteItemFromCart,
+      emptyItemsFromCart,
       infoTotalItems,
       setInfoTotalItems,
       formInfo,
