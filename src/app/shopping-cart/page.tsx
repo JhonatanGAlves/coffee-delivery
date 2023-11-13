@@ -150,17 +150,22 @@ export default function ShoppingCartPage() {
           </div>
           <form className="flex flex-col gap-4">
             <input
-              type="text"
-              value={formInfo.zipCode}
+              type="number"
               className={`${
                 error.zipCode && "border-red-500"
               } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
-              onChange={(e) => onChangeFormInfo("zipCode", e)}
+              value={formInfo.zipCode}
+              onChange={(e) => {
+                if (e.target.value.length < 6) {
+                  onChangeFormInfo("zipCode", e);
+                }
+              }}
               placeholder="Zip Code"
             />
             <input
               type="text"
               value={formInfo.street}
+              maxLength={60}
               className={`${
                 error.street && "border-red-500"
               } outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
@@ -169,18 +174,23 @@ export default function ShoppingCartPage() {
             />
             <div className="flex gap-3 w-full">
               <input
-                type="text"
+                type="number"
                 value={formInfo.number}
                 className={`${
                   error.number && "border-red-500"
                 } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
-                onChange={(e) => onChangeFormInfo("number", e)}
+                onChange={(e) => {
+                  if (e.target.value.length < 11) {
+                    onChangeFormInfo("number", e);
+                  }
+                }}
                 placeholder="Number"
               />
               <div className="flex items-center gap-1 flex-1 p-3 bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus-within:border-[var(--yellow-dark)] rounded transition-all">
                 <input
                   type="text"
                   value={formInfo.complement}
+                  maxLength={30}
                   className="flex-1 outline-none font-normal text-sm bg-transparent placeholder:text-[var(--base-label)]"
                   onChange={(e) => onChangeFormInfo("complement", e)}
                   placeholder="Complement"
@@ -194,6 +204,7 @@ export default function ShoppingCartPage() {
               <input
                 type="text"
                 value={formInfo.district}
+                maxLength={30}
                 className={`${
                   error.district && "border-red-500"
                 } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
@@ -203,6 +214,7 @@ export default function ShoppingCartPage() {
               <input
                 type="text"
                 value={formInfo.city}
+                maxLength={30}
                 className={`${
                   error.city && "border-red-500"
                 } flex-1 outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
@@ -212,6 +224,7 @@ export default function ShoppingCartPage() {
               <input
                 type="text"
                 value={formInfo.uf}
+                maxLength={2}
                 className={`${
                   error.uf && "border-red-500"
                 } w-[11.11%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
