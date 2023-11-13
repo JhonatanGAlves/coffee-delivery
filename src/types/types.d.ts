@@ -28,3 +28,14 @@ interface MessageAlertTypes {
   description: string;
   showAlert: boolean;
 }
+
+type FormInfoErrorTypes = {
+  zipCode: boolean;
+  street: boolean;
+  number: boolean;
+  complement: boolean;
+  district: boolean;
+  city: boolean;
+  uf: boolean;
+  paymentMethod: boolean;
+};

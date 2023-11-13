@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { cafes } from "@/utils/mock";
-import { FORM_INFO_DEFAULT } from "@/utils/data";
+import { FORM_INFO_DEFAULT, FORM_INFO_ERROR_DEFAULT } from "@/utils/data";
 
 interface CoffeeDeliveryProviderProps {
   children: ReactNode;
@@ -38,6 +38,8 @@ interface CoffeeDeliveryContextProps {
   setShowSuccessNotificationAlert: (
     showSuccessNotificationAlert: MessageAlertTypes
   ) => void;
+  error: FormInfoErrorTypes;
+  setError: (error: FormInfoErrorTypes) => void;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -62,6 +64,9 @@ export const CoffeeDeliveryProvider = ({
       showAlert: false,
       description: "",
     });
+  const [error, setError] = useState<FormInfoErrorTypes>(
+    FORM_INFO_ERROR_DEFAULT
+  );
 
   function addItemToCart(
     currentCart: CoffeeCartTypes[],
@@ -134,6 +139,8 @@ export const CoffeeDeliveryProvider = ({
   function emptyItemsFromCart(currentCart: CoffeeCartTypes[]) {
     setCart([]);
     localStorage.setItem("cart", JSON.stringify([]));
+
+    setError(FORM_INFO_ERROR_DEFAULT);
   }
 
   const updateInfoTotalItems = useCallback(() => {
@@ -167,6 +174,8 @@ export const CoffeeDeliveryProvider = ({
       setFormInfo,
       showSuccessNotificationAlert,
       setShowSuccessNotificationAlert,
+      error,
+      setError,
     };
   }, [
     cafesAvailable,
@@ -174,6 +183,7 @@ export const CoffeeDeliveryProvider = ({
     infoTotalItems,
     formInfo,
     showSuccessNotificationAlert,
+    error,
   ]);
 
   return (

@@ -8,11 +8,12 @@ import {
   CurrencyDollar,
   MapPinLine,
   Money,
+  Warning,
 } from "@phosphor-icons/react";
 
 import CoffeeCartCard from "@/components/main/coffee-card/CoffeeCartCard";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
-import { FORM_INFO_DEFAULT } from "@/utils/data";
+import { FORM_INFO_DEFAULT, FORM_INFO_ERROR_DEFAULT } from "@/utils/data";
 
 export default function ShoppingCartPage() {
   const {
@@ -21,8 +22,14 @@ export default function ShoppingCartPage() {
     setFormInfo,
     emptyItemsFromCart,
     setShowSuccessNotificationAlert,
+    error,
+    setError,
   } = useContext(CoffeeDeliveryContext);
   const [totalSumItems, setTotalSumItems] = useState(0);
+  const [showRequiredFieldMessage, setShowRequiredFieldMessage] =
+    useState(false);
+  const [showRequiredSelectMessage, setShowRequiredSelectMessage] =
+    useState(false);
 
   const DELIVERY_FEE_VALUE = cart.length > 0 ? 3.5 : 0.0;
 
@@ -53,6 +60,61 @@ export default function ShoppingCartPage() {
     };
 
     setFormInfo(newFormInfo);
+  }
+
+  function validateFormFields(formInfo: FormInfoTypes): {
+    pass: boolean;
+    errors: FormInfoErrorTypes;
+  } {
+    let pass = true;
+    let errors: FormInfoErrorTypes = FORM_INFO_ERROR_DEFAULT;
+
+    if (!formInfo.zipCode) {
+      pass = false;
+      errors = { ...errors, zipCode: true };
+    }
+
+    if (!formInfo.street) {
+      pass = false;
+      errors = { ...errors, street: true };
+    }
+
+    if (!formInfo.number) {
+      pass = false;
+      errors = { ...errors, number: true };
+    }
+
+    if (!formInfo.district) {
+      pass = false;
+      errors = { ...errors, district: true };
+    }
+
+    if (!formInfo.city) {
+      pass = false;
+      errors = { ...errors, city: true };
+    }
+
+    if (!formInfo.uf) {
+      pass = false;
+      errors = { ...errors, uf: true };
+    }
+
+    return { pass, errors };
+  }
+
+  function validateSelects(formInfo: FormInfoTypes): {
+    pass: boolean;
+    errors: FormInfoErrorTypes;
+  } {
+    let pass = true;
+    let errors: FormInfoErrorTypes = FORM_INFO_ERROR_DEFAULT;
+
+    if (!formInfo.paymentMethod) {
+      pass = false;
+      errors = { ...errors, paymentMethod: true };
+    }
+
+    return { pass, errors };
   }
 
   useEffect(() => {
@@ -86,19 +148,22 @@ export default function ShoppingCartPage() {
               </p>
             </div>
           </div>
-
           <form className="flex flex-col gap-4">
             <input
               type="text"
               value={formInfo.zipCode}
-              className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+              className={`${
+                error.zipCode && "border-red-500"
+              } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
               onChange={(e) => onChangeFormInfo("zipCode", e)}
               placeholder="Zip Code"
             />
             <input
               type="text"
               value={formInfo.street}
-              className="outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+              className={`${
+                error.street && "border-red-500"
+              } outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
               onChange={(e) => onChangeFormInfo("street", e)}
               placeholder="Street"
             />
@@ -106,7 +171,9 @@ export default function ShoppingCartPage() {
               <input
                 type="text"
                 value={formInfo.number}
-                className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                className={`${
+                  error.number && "border-red-500"
+                } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
                 onChange={(e) => onChangeFormInfo("number", e)}
                 placeholder="Number"
               />
@@ -127,26 +194,37 @@ export default function ShoppingCartPage() {
               <input
                 type="text"
                 value={formInfo.district}
-                className="w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                className={`${
+                  error.district && "border-red-500"
+                } w-[37.037%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
                 onChange={(e) => onChangeFormInfo("district", e)}
                 placeholder="District"
               />
               <input
                 type="text"
                 value={formInfo.city}
-                className=" flex-1 outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                className={`${
+                  error.city && "border-red-500"
+                } flex-1 outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
                 onChange={(e) => onChangeFormInfo("city", e)}
                 placeholder="City"
               />
               <input
                 type="text"
                 value={formInfo.uf}
-                className="w-[11.11%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all"
+                className={`${
+                  error.uf && "border-red-500"
+                } w-[11.11%] outline-none p-3 font-normal text-sm bg-[var(--base-input)] border border-solid border-[var(--base-button)] focus:border-[var(--yellow-dark)] placeholder:text-[var(--base-label)] rounded transition-all`}
                 onChange={(e) => onChangeFormInfo("uf", e)}
                 placeholder="UF"
               />
             </div>
           </form>
+          {showRequiredFieldMessage && (
+            <span className="flex items-center gap-1 font-bold text-xs text-red-500">
+              <Warning size={12} weight="fill" /> Required fields
+            </span>
+          )}
         </div>
 
         <div className="flex flex-col gap-8 p-10 bg-[var(--base-card)] rounded-md">
@@ -204,6 +282,12 @@ export default function ShoppingCartPage() {
               <span>MONEY</span>
             </button>
           </div>
+          {showRequiredSelectMessage && (
+            <span className="flex items-center gap-1 font-bold text-xs text-red-500">
+              <Warning size={12} weight="fill" /> You need to select a payment
+              method
+            </span>
+          )}
         </div>
       </div>
 
@@ -262,19 +346,45 @@ export default function ShoppingCartPage() {
               </span>
             </div>
           </div>
-          <Link href={"order-confirmed"}>
+          <Link
+            href={`${
+              !validateFormFields(formInfo).pass ||
+              !validateSelects(formInfo).pass
+                ? "#"
+                : "/order-confirmed"
+            }`}
+          >
             <button
               className="outline-none w-full p-3 bg-[var(--yellow)] text-[var(--white)] text-sm font-bold uppercase hover:bg-[var(--yellow-dark)] transition-all rounded-md disabled:opacity-60 disabled:bg-[var(--yellow)] disabled:cursor-not-allowed"
               onClick={() => {
-                emptyItemsFromCart(cart);
+                const validationFields = validateFormFields(formInfo);
+                const validationSelects = validateSelects(formInfo);
 
-                setShowSuccessNotificationAlert({
-                  message:
-                    "Congratulations your order has been confirmed successfully",
-                  description:
-                    "You can return to the home page and buy new cafes",
-                  showAlert: true,
-                });
+                if (validationFields.pass && validationSelects.pass) {
+                  emptyItemsFromCart(cart);
+
+                  setShowSuccessNotificationAlert({
+                    message:
+                      "Congratulations your order has been confirmed successfully",
+                    description:
+                      "You can return to the home page and buy new cafes",
+                    showAlert: true,
+                  });
+                } else {
+                  if (!validationFields.pass) {
+                    setError(validationFields.errors);
+                    setShowRequiredFieldMessage(true);
+                  } else {
+                    setError(validationFields.errors);
+                    setShowRequiredFieldMessage(false);
+                  }
+
+                  if (!validationSelects.pass) {
+                    setShowRequiredSelectMessage(true);
+                  } else {
+                    setShowRequiredSelectMessage(false);
+                  }
+                }
               }}
               disabled={!cart.length}
             >
