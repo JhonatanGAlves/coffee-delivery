@@ -31,6 +31,9 @@ export default function ShoppingCartPage() {
   const [showRequiredSelectMessage, setShowRequiredSelectMessage] =
     useState(false);
 
+  const responsivePadding =
+    "px-4 min-[920px]:px-10 min-[980px]:px-20 min-[1140px]:px-40";
+
   const DELIVERY_FEE_VALUE = cart.length > 0 ? 3.5 : 0.0;
 
   function getTotalSumItems(currentCart: CoffeeCartTypes[]) {
@@ -126,7 +129,9 @@ export default function ShoppingCartPage() {
   }, []);
 
   return (
-    <div className="mt-[6.5rem] bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20">
+    <div
+      className={`mt-[6.5rem] bg-[var('--background')] flex flex-col lg:flex-row justify-center lg:justify-between gap-8 ${responsivePadding} pt-10 pb-20`}
+    >
       <div className="flex flex-col">
         <span className="mb-[0.9375rem] text-[var(--base-subtitle)] font-sans font-bold text-lg">
           Complete your order

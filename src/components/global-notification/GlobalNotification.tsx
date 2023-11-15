@@ -29,7 +29,7 @@ export default function GlobalNotification({
 
   return (
     <div
-      className={`${show ? "flex" : "hidden"} gap-2 ${
+      className={`${show ? "flex" : "hidden"} z-20 gap-2 ${
         type === "success"
           ? "bg-[#4BB543]"
           : type === "warning"

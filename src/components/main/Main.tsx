@@ -18,9 +18,14 @@ export default function Main() {
     setShowSuccessNotificationAlert,
   } = useContext(CoffeeDeliveryContext);
 
+  const responsivePadding =
+    "px-4 min-[920px]:px-10 min-[980px]:px-20 min-[1140px]:px-40";
+
   return (
-    <div className="mt-[6.5rem] flex flex-col px-40 pb-[8.5625rem]">
-      <div className="flex justify-between items-center h-[34rem]">
+    <div
+      className={`mt-[6.5rem] flex flex-col ${responsivePadding} pb-[8.5625rem]`}
+    >
+      <div className="flex relative pt-[6.5rem] lg:pt-0 justify-center min-[920px]:justify-between items-center h-fit lg:h-[34rem]">
         <div className="absolute -z-10">
           <Image
             src={bgHero}
@@ -31,7 +36,7 @@ export default function Main() {
           />
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex relative flex-col pb-[22.5rem] min-[920px]:pb-0">
           <h1 className="font-sans font-extrabold text-5xl text-[var(--base-title)]">
             Find the perfect coffee for any time of day
           </h1>
@@ -72,7 +77,7 @@ export default function Main() {
         </div>
 
         <Image
-          className="pl-14"
+          className="pl-14 absolute bottom-0 min-[920px]:static"
           src={bgImage}
           alt="Coffee image from background"
         />

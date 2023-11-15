@@ -13,6 +13,9 @@ export default function Header() {
   const { infoTotalItems, userGeolocation } = useContext(CoffeeDeliveryContext);
   const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
 
+  const responsivePadding =
+    "px-4 min-[920px]:px-10 min-[980px]:px-20 min-[1140px]:px-40";
+
   const handleScroll = () => {
     setCurrentScrollPosition(window.scrollY);
   };
@@ -29,7 +32,7 @@ export default function Header() {
     <header
       className={`${
         currentScrollPosition > 104 && "drop-shadow-md"
-      } fixed top-0 w-screen bg-[var(--background)] flex justify-between items-center px-40 py-8`}
+      } fixed top-0 z-10 w-screen bg-[var(--background)] flex justify-between items-center ${responsivePadding} py-8`}
     >
       <Link href={"/"}>
         <Image src={logoHeader} alt="Coffee image in homepage header" />

@@ -16,11 +16,14 @@ export default function OrderConfirmedPage() {
     setShowSuccessNotificationAlert,
   } = useContext(CoffeeDeliveryContext);
 
+  const responsivePadding =
+    "px-4 min-[920px]:px-10 min-[980px]:px-20 min-[1140px]:px-40";
+
   return (
     <div
       className={`${
         !formInfo.street && "h-[calc(100vh-6.5rem)]"
-      } mt-[6.5rem] bg-[var('--background')] flex justify-between gap-8 px-40 pt-10 pb-20`}
+      } mt-[6.5rem] bg-[var('--background')] flex flex-col md:flex-row justify-center md:justify-between gap-8 ${responsivePadding} pt-10 pb-20`}
     >
       <div className={`${!formInfo.street && "justify-center"} flex flex-col`}>
         <h1 className="font-sans text-[var(--yellow-dark)] text-[2rem] font-extrabold">
