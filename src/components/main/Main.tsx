@@ -19,7 +19,7 @@ export default function Main() {
   } = useContext(CoffeeDeliveryContext);
 
   return (
-    <div className="flex flex-col px-40 pb-[8.5625rem]">
+    <div className="mt-[6.5rem] flex flex-col px-40 pb-[8.5625rem]">
       <div className="flex justify-between items-center h-[34rem]">
         <div className="absolute -z-10">
           <Image

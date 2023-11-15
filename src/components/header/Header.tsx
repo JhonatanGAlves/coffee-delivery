@@ -4,13 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { MapPin, ShoppingCart } from "@phosphor-icons/react";
+import { MapPin, ShoppingCart, Spinner } from "@phosphor-icons/react";
 
 import logoHeader from "../../assets/logo-header.svg";
 import { CoffeeDeliveryContext } from "@/context/CoffeeDeliveryContext";
 
 export default function Header() {
-  const { infoTotalItems } = useContext(CoffeeDeliveryContext);
+  const { infoTotalItems, userGeolocation } = useContext(CoffeeDeliveryContext);
   const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
 
   const handleScroll = () => {
@@ -37,7 +37,21 @@ export default function Header() {
       <div className="flex gap-3">
         <div className="flex justify-center items-center gap-1 px-2 h-[2.375rem] rounded-md font-mono font-normal text-sm text-[var(--purple-dark)] bg-[var(--purple-light)]">
           <MapPin width={15.13} height={19.25} weight="fill" />
-          <span>Huston, TX</span>
+          {!userGeolocation.status ? (
+            <>
+              <Spinner className="animate-spin" size={12} />
+              <span>Loading your location</span>
+            </>
+          ) : (
+            <span>
+              {userGeolocation.status === "AUTHORIZED"
+                ? `${userGeolocation.city}, ${userGeolocation.state}`
+                : userGeolocation.status === "NOT_AUTHORIZED"
+                ? userGeolocation.city
+                : userGeolocation.status === "PROBLEM_GET_LOCATION" &&
+                  userGeolocation.city}
+            </span>
+          )}
         </div>
 
         <div className="relative">

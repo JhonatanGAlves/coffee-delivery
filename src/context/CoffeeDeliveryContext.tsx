@@ -40,6 +40,7 @@ interface CoffeeDeliveryContextProps {
   ) => void;
   error: FormInfoErrorTypes;
   setError: (error: FormInfoErrorTypes) => void;
+  userGeolocation: UserGeolocationTypes;
 }
 
 export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
@@ -67,6 +68,11 @@ export const CoffeeDeliveryProvider = ({
   const [error, setError] = useState<FormInfoErrorTypes>(
     FORM_INFO_ERROR_DEFAULT
   );
+  const [userGeolocation, setUserGeolocation] = useState<UserGeolocationTypes>({
+    city: "",
+    state: "",
+    status: undefined,
+  });
 
   function addItemToCart(
     currentCart: CoffeeCartTypes[],
@@ -152,12 +158,64 @@ export const CoffeeDeliveryProvider = ({
     setInfoTotalItems(totalAmount);
   }, [cart]);
 
+  function handleUserGeolocation(position: UserGeolocationSuccessTypes) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const address = data.address;
+        setUserGeolocation({
+          city: address.city,
+          state: address.state,
+          status: "AUTHORIZED",
+        });
+      })
+      .catch((error) => {
+        console.error("Error getting location data: ", error);
+      });
+  }
+
+  function errorCallback(error: UserGeolocationErrorTypes) {
+    if (error.code === 1) {
+      setUserGeolocation({
+        city: "Unauthorized to obtain location",
+        state: "",
+        status: "NOT_AUTHORIZED",
+      });
+    }
+
+    if (error.code === 2 || error.code === 3) {
+      setUserGeolocation({
+        city: "Sorry, we had a problem getting your location",
+        state: "",
+        status: "PROBLEM_GET_LOCATION",
+      });
+    }
+  }
+
+  function getCurrentPosition() {
+    navigator.geolocation.getCurrentPosition(
+      handleUserGeolocation,
+      errorCallback,
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 10000,
+      }
+    );
+  }
+
   useEffect(() => {
     updateInfoTotalItems();
   }, [cart]);
 
   useEffect(() => {
     setCafesAvailable(cafes);
+    getCurrentPosition();
   }, []);
 
   const values = useMemo(() => {
@@ -176,6 +234,7 @@ export const CoffeeDeliveryProvider = ({
       setShowSuccessNotificationAlert,
       error,
       setError,
+      userGeolocation,
     };
   }, [
     cafesAvailable,
@@ -184,6 +243,7 @@ export const CoffeeDeliveryProvider = ({
     formInfo,
     showSuccessNotificationAlert,
     error,
+    userGeolocation,
   ]);
 
   return (

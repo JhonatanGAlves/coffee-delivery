@@ -39,3 +39,29 @@ type FormInfoErrorTypes = {
   uf: boolean;
   paymentMethod: boolean;
 };
+
+type UserGeolocationTypes = {
+  city: string;
+  state: string;
+  status: "NOT_AUTHORIZED" | "AUTHORIZED" | "PROBLEM_GET_LOCATION" | undefined;
+};
+
+type UserGeolocationErrorTypes = {
+  code: number;
+  message: string;
+};
+
+type UserGeolocationSuccessTypes = {
+  coords: CoordsType;
+  timestamp: number;
+};
+
+type CoordsType = {
+  accuracy: number;
+  altitude: number | null;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  latitude: number;
+  longitude: number;
+  speed: number | null;
+};
