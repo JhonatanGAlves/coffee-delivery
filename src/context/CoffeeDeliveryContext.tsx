@@ -50,10 +50,14 @@ export const CoffeeDeliveryContext = createContext<CoffeeDeliveryContextProps>(
 export const CoffeeDeliveryProvider = ({
   children,
 }: CoffeeDeliveryProviderProps) => {
-  const getCartFromStorage =
-    JSON.parse(localStorage.getItem("cart") || "[]").length > 0
-      ? JSON.parse(localStorage.getItem("cart") || "[]")
-      : null;
+  let getCartFromStorage = [];
+
+  if (typeof window !== "undefined") {
+    getCartFromStorage =
+      JSON.parse(localStorage.getItem("cart") || "[]").length > 0
+        ? JSON.parse(localStorage.getItem("cart") || "[]")
+        : null;
+  }
 
   const [cafesAvailable, setCafesAvailable] = useState<CoffeeTypes[]>([]);
   const [cart, setCart] = useState<CoffeeCartTypes[]>(getCartFromStorage ?? []);
